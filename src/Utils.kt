@@ -20,7 +20,7 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
  */
 fun Any?.println() = println(this)
 
-fun printPartResultWithExecutionTime(part: Int, result: Any, timeInMillis: Long) {
+fun printResultWithExecutionTime(part: Int, result: Any, timeInMillis: Long) {
     check(part in 1..2) { "part should be either 1 or 2" }
 
     val partResult = "Part $part: $result"
