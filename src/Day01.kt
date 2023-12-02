@@ -1,3 +1,5 @@
+import kotlin.system.measureTimeMillis
+
 fun main() {
     fun part1(input: List<String>): Int {
         return input.sumOf { line ->
@@ -6,38 +8,52 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        val wordToDigitMap = mapOf(
-                "one" to "1",
-                "two" to "2",
-                "three" to "3",
-                "four" to "4",
-                "five" to "5",
-                "six" to "6",
-                "seven" to "7",
-                "eight" to "8",
-                "nine" to "9"
+        val digitMap = mapOf(
+                "one" to '1',
+                "two" to '2',
+                "three" to '3',
+                "four" to '4',
+                "five" to '5',
+                "six" to '6',
+                "seven" to '7',
+                "eight" to '8',
+                "nine" to '9'
         )
 
-        val digits = wordToDigitMap.keys.sortedBy { it.length } + wordToDigitMap.values
-        val result = input.sumOf { line ->
-            val firstDigit = line.findAnyOf(strings = digits)!!.second.let { wordOrDigit ->
-                if (wordOrDigit.length == 1) wordOrDigit else wordToDigitMap[wordOrDigit]
-            }
-            val lastDigit = line.findLastAnyOf(strings = digits)!!.second.let { wordOrDigit ->
-                if (wordOrDigit.length == 1) wordOrDigit else wordToDigitMap[wordOrDigit]
-            }
-            (firstDigit + lastDigit).toInt()
+        fun String.toDigitChar(): Char {
+            return if (length == 1) first() else digitMap.getValue(key = this)
         }
-        return result
+
+        val digitRegex = Regex("[0-9]|one|two|three|four|five|six|seven|eight|nine")
+        return input.sumOf { line ->
+            val digits = digitRegex.findAll(input = line).flatMap { matchResult ->
+                matchResult.groupValues
+            }
+
+            val firstDigit = digits.first().toDigitChar()
+            val lastDigit = digits.last().toDigitChar()
+            "$firstDigit$lastDigit".toInt()
+        }
     }
 
-    val testPart1Input = readInput("Day01_part1_test")
-    check(part1(testPart1Input) == 142)
+    val partOneTestInput = readInput("Day01_part1_test")
+    check(part1(partOneTestInput) == 142)
 
-    val testPart2Input = readInput("Day01_part2_test")
-    check(part2(testPart2Input) == 281)
+    val partTwoTestInput = readInput("Day01_part2_test")
+    check(part2(partTwoTestInput) == 281)
 
     val input = readInput("Day01")
-    part1(input).println()
-    part2(input).println()
+    val partOneResult: Int
+    val partOneTimeInMillis = measureTimeMillis {
+        partOneResult = part1(input)
+    }
+    printResultWithExecutionTime(part = 1, result = partOneResult, timeInMillis = partOneTimeInMillis)
+
+    val partTwoResult: Int
+    val partTwoTimeInMillis = measureTimeMillis {
+        partTwoResult = part2(input)
+    }
+    printResultWithExecutionTime(part = 2, result = partTwoResult, timeInMillis = partTwoTimeInMillis)
+
+
 }
