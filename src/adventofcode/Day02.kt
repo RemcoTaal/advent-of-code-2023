@@ -93,7 +93,36 @@ class Day02 {
 
     @Benchmark
     fun part2(): Int {
-        return input.size
+        return input.sumOf { line ->
+            val sets = line.substringAfter(':')
+            val subSets = sets.split(';', ',')
+
+            val minimalCubesMap = mutableMapOf<Char, Int>()
+            subSets.forEach { subSet ->
+                val trimmedSubset = subSet.trim()
+
+                val cubes: Int
+                val color: Char
+                trimmedSubset.split(' ').let {
+                    cubes = it[0].toInt()
+                    color = it[1].first()
+                }
+
+                if (minimalCubesMap[color] == null || minimalCubesMap[color]!! < cubes) {
+                    minimalCubesMap[color] = cubes
+                }
+            }
+
+            minimalCubesMap.values.pow()
+        }
+    }
+
+    private fun Collection<Int>.pow(): Int {
+        var power = 1
+        for (int in this) {
+            power *= int
+        }
+        return power
     }
 }
 
@@ -104,7 +133,7 @@ fun main() {
     check(day02.part1() == 8)
 
     day02.input = readInput("Day02_test_2")
-    check(day02.part2() == 281)
+    check(day02.part2() == 2286)
 
     day02.setup()
     println("Part 1: ${day02.part1()}")
