@@ -93,17 +93,16 @@ class Day02 {
 
     @Benchmark
     fun part2(): Int {
+        val minimalCubesMap = mutableMapOf<Char, Int>()
+
         return input.sumOf { line ->
             val sets = line.substringAfter(':')
             val subSets = sets.split(';', ',')
 
-            val minimalCubesMap = mutableMapOf<Char, Int>()
             subSets.forEach { subSet ->
-                val trimmedSubset = subSet.trim()
-
                 val cubes: Int
                 val color: Char
-                trimmedSubset.split(' ').let {
+                subSet.trim().split(' ').let {
                     cubes = it[0].toInt()
                     color = it[1].first()
                 }
@@ -113,7 +112,7 @@ class Day02 {
                 }
             }
 
-            minimalCubesMap.values.pow()
+            minimalCubesMap.values.pow().also { minimalCubesMap.clear() }
         }
     }
 
