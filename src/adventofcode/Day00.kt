@@ -13,7 +13,7 @@ class Day00 {
 
     @Setup
     fun setup() {
-        input = readInput("Day01")
+        input = readInput("Day00")
     }
 
     @Benchmark
